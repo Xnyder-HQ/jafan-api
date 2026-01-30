@@ -1,0 +1,12 @@
+export const SuccessResCode: number = 200;
+export const CreateSuccessResCode: number = 201;
+export const NoContentSuccessResCode: number = 204;
+export const UserErrorResCode: number = 400;
+export const InvalidAuthenticationErrorResCode: number = 401;
+export const AuthenticationErrorResCode: number = 403;
+export const NotFoundResCode: number = 404;
+export const ConflictResCode: number = 409;
+export const UserValidationErrorResCode: number = 422;
+export const TooManyRequestsResCode: number = 429;
+export const ServerErrorResCode: number = 500;
+export const ServiceUnavailableErrorResCode: number = 503;

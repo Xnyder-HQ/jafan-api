@@ -1,0 +1,13 @@
+{
+	"exec": "npm run dev",
+	"ext": "ts,json,js,mjs,cjs",
+	"watch": [
+		"src/*",
+		"public/*"
+	], 
+	"ignore": [
+		"**/__tests__/**",
+		"*.test.js",
+		"*.spec.js"
+	]
+}
