@@ -11,15 +11,18 @@ import Database from "./models";
 // Rate limiting
 const limiter = rateLimit({
 	windowMs: 5 * 60 * 1000, // 5 minutes
-	max: 1000, // Limit each IP to 100 requests per windowMs
+	// max: 1000, // Limit each IP to 100 requests per windowMs || Deprecated
+	limit: 100, // Limit each IP to 100 requests per windowMs
 	message: 'Too many requests from this IP, please try again later',
 	keyGenerator: (req) => req.ip || 'unknown',	
 });
 
 export default class Server {
-	constructor(app: Application) {
+	constructor() {}
+
+	async init(app: Application) {
 		this.config(app);
-		this.syncDatabase();
+		await this.syncDatabase();
 		new Routes(app);
 	}
 
@@ -69,15 +72,13 @@ export default class Server {
 		app.use(morganMiddleware);
 	}
 
-	private syncDatabase(): void {
-		const db = new Database();
-		db.sequelize?.sync({ alter: false }).then(() => {
-			// creating defaults
-			createApiKeys();
-			createAppDefaults();
-			createModulesAndSubModules();
-			createDefaultUser();
-			createBusinessRules();
-		});
+	private async syncDatabase(): Promise<void> {
+		await Database.sequelize?.sync({ alter: false });
+
+		await createApiKeys();
+		await createAppDefaults();
+		await createModulesAndSubModules();
+		await createDefaultUser();
+		await createBusinessRules();
 	}
 }

@@ -40,7 +40,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				include: [
 					{
 						model: ROLE,
@@ -77,7 +77,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findOne({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					...payload
 				},
@@ -111,7 +111,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: dynamicWhere(queryParams),
 				include: [
 					{
@@ -157,7 +157,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					...dynamicWhere(queryParams),
 					createdAt: {
@@ -221,7 +221,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					[Op.or]: [
 						{
@@ -454,7 +454,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				include: [
 					{
 						model: ROLE,
@@ -524,7 +524,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findOne({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					[Op.or]: [
 						{ unique_id: payload.unique_id },
@@ -593,7 +593,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: dynamicWhere(queryParams),
 				include: [
 					{
@@ -670,7 +670,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					...dynamicWhere(queryParams),
 					createdAt: {
@@ -765,7 +765,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findAndCountAll({
-				attributes: { exclude: ['id', 'profile_public_id'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates'] },
 				where: {
 					[Op.or]: [
 						{
@@ -822,7 +822,7 @@ export default class UserController {
 
 		try {
 			const response = await USER.findOne({
-				attributes: { exclude: ['id', 'profile_public_id', 'access', 'status', 'updatedAt'] },
+				attributes: { exclude: ['id', 'profile_image_public_id', 'privates', 'access', 'status', 'updatedAt'] },
 				where: {
 					unique_id: user_unique_id,
 					status: default_status
@@ -1874,8 +1874,8 @@ export default class UserController {
 					SuccessResponse(res, { unique_id: user_unique_id, text: "User was deleted successfully!" }, null);
 
 					// Delete former image available
-					if (user_details.profile_public_id !== null) {
-						await deleteImage(clouder_key || '', { cloudinary_name: cloudy_name, cloudinary_key: cloudy_key, cloudinary_secret: cloudy_secret, public_id: user_details.profile_public_id });
+					if (user_details.profile_image_public_id !== null) {
+						await deleteImage(clouder_key || '', { cloudinary_name: cloudy_name, cloudinary_key: cloudy_key, cloudinary_secret: cloudy_secret, public_id: user_details.profile_image_public_id });
 					}
 				} else {
 					throw new Error("Error deleting record");

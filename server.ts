@@ -3,26 +3,37 @@ import express, { Application } from "express";
 import Server from "./src/index";
 import Database from "./src/models";
 
-const app: Application = express();
-const server: Server = new Server(app);
-const NODE_ENV: any = process.env.NODE_ENV;
-const PORT: number = process.env.PORT ? (NODE_ENV === "development" ? parseInt('885') : parseInt(process.env.PORT || '3085', 10)) : (NODE_ENV === "development" ? parseInt('885') : parseInt(process.env.PORT || '3085', 10));
-const db = new Database();
+async function bootstrap() {
+	// change timezone for app
+	process.env.TZ = "UTC";
 
-// change timezone for app
-process.env.TZ = "UTC";
+	const app: Application = express();
+	const server = new Server();
 
-app
-	.listen(PORT, () => {
+	const NODE_ENV: string | undefined = process.env.NODE_ENV;
+
+	const PORT: number =
+		NODE_ENV === "development"
+			? 885
+			: parseInt(process.env.PORT || "3085", 10);
+
+	await server.init(app);
+
+	const listener = app.listen(PORT, () => {
 		console.log(`Server is running on port ${PORT}.`);
-	})
-	.on("error", (err: any) => {
+	});
+
+	listener.on("error", async (err: any) => {
 		if (err.code === "EADDRINUSE") {
 			console.log("Error: address already in use");
-			db.sequelize?.close();
+			await Database.sequelize?.close();
 			process.exit(1);
 		} else {
 			console.log(err);
+			await Database.sequelize?.close();
 			process.exit(1);
 		}
 	});
+}
+
+bootstrap();
