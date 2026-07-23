@@ -1,0 +1,12 @@
+DirectoryIndex disabled
+
+RewriteEngine On
+
+# Allow Let's Encrypt
+RewriteRule ^\.well-known/ - [L]
+
+# Block any request for a file with an extension
+RewriteRule ^.+\.[A-Za-z0-9]{1,10}$ - [F,L]
+
+# Allow only .well-known
+RewriteRule (^|/)\.(?!well-known(?:/|$)).* - [F,L,NC]
